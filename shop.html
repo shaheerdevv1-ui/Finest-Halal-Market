@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop All — Finest Halal Supermarket</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="marquee"><div class="marquee-track">
+  <span>100% HALAL CERTIFIED</span><span>FREE DELIVERY OVER RS. 2,500</span><span>FRESH DAILY BUTCHERY</span><span>SAME-DAY DELIVERY IN CITY</span>
+  <span>100% HALAL CERTIFIED</span><span>FREE DELIVERY OVER RS. 2,500</span><span>FRESH DAILY BUTCHERY</span><span>SAME-DAY DELIVERY IN CITY</span>
+</div></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="logo"><img src="images/logo.png" alt="Finest Supermarket" class="logo-img"></a>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="collection.html">Collections</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="#" class="icon-btn cart-trigger">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L4 2H2"/></svg>
+        <span class="label">Cart</span>
+        <span class="cart-count">0</span>
+      </a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <img src="images/logo.png" alt="Finest Supermarket" class="mobile-menu-logo">
+      <button class="mobile-menu-close" aria-label="Close menu">&times;</button>
+    </div>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="collection.html">Collections</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h1>Shop All Products</h1>
+  <p>Every department, every cut, all in one place.</p>
+</div>
+
+<section class="section section-tight">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span>Shop</div>
+
+    <div class="toolbar">
+      <div class="filter-tabs" id="filterTabs">
+        <span class="active" data-filter="All">All</span>
+        <span data-filter="Meat & Poultry">Meat &amp; Poultry</span>
+        <span data-filter="Produce">Produce</span>
+        <span data-filter="Bakery">Bakery</span>
+        <span data-filter="Pantry">Pantry</span>
+        <span data-filter="Dairy">Dairy</span>
+        <span data-filter="Seafood">Seafood</span>
+      </div>
+      <div class="toolbar-right">
+        <span class="result-count" id="resultCount"></span>
+        <div class="select-wrap">
+          <select class="styled-select" id="sortSelect">
+            <option value="default">Sort: Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A–Z</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-grid" id="shopGrid"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img src="images/logo.png" alt="Finest Supermarket" class="footer-logo-img">
+        <p class="footer-desc">Certified halal groceries, cut fresh and delivered with care, every single day.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Shop</div>
+        <a href="shop.html">All Products</a>
+        <a href="collection.html">Collections</a>
+        <a href="checkout.html">Checkout</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="index.html#contact">Contact</a>
+        <a href="index.html#hero">Our Standard</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Support</div>
+        <a href="#">Delivery Info</a>
+        <a href="#">Halal Certification</a>
+        <a href="#">Returns</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Finest Halal Supermarket. All rights reserved.</span>
+      <span>Demo storefront — for presentation purposes.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay"></div>
+<div class="cart-drawer">
+  <div class="cart-header"><h3>Your Cart</h3><button class="cart-close">&times;</button></div>
+  <div class="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal-row"><span>Subtotal</span><strong>Rs. 0</strong></div>
+    <a href="checkout.html" class="btn btn-brass btn-block">Checkout</a>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  let currentFilter = 'All';
+  let currentSort = 'default';
+
+  function getFiltered(){
+    let list = currentFilter==='All' ? [...PRODUCTS] : PRODUCTS.filter(p=>p.category===currentFilter);
+    if(currentSort==='price-asc') list.sort((a,b)=>a.price-b.price);
+    if(currentSort==='price-desc') list.sort((a,b)=>b.price-a.price);
+    if(currentSort==='name-asc') list.sort((a,b)=>a.name.localeCompare(b.name));
+    return list;
+  }
+
+  function render(){
+    const list = getFiltered();
+    document.getElementById('shopGrid').innerHTML = list.map(productCardHTML).join('');
+    document.getElementById('resultCount').textContent = list.length + ' items';
+  }
+
+  document.querySelectorAll('#filterTabs span').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('#filterTabs span').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.dataset.filter;
+      render();
+    });
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', (e)=>{
+    currentSort = e.target.value;
+    render();
+  });
+
+  // support ?cat= deep link from home page category cards
+  (function(){
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('cat');
+    if(cat){
+      const tab = document.querySelector(`#filterTabs span[data-filter="${cat}"]`);
+      if(tab){
+        document.querySelectorAll('#filterTabs span').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = cat;
+      }
+    }
+  })();
+
+  render();
+</script>
+</body>
+</html>
